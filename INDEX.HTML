@@ -1,0 +1,978 @@
+<?php
+// Configurações da Imobiliária
+$nomeEmpresa = "EXON IMÓVEIS";
+$whatsappNum = "5541999999999";
+$mensagemWpp = urlencode("Olá! Gostaria de solicitar uma avaliação do meu imóvel com a EXON IMÓVEIS.");
+$linkWpp = "https://wa.me/{$whatsappNum}?text={$mensagemWpp}";
+?>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avaliação de Imóveis | <?php echo $nomeEmpresa; ?></title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#FFF3E0',
+                            100: '#FFE0B2',
+                            200: '#FFCC80',
+                            300: '#FFB74D',
+                            400: '#FFA726',
+                            500: '#FF6600',
+                            600: '#E65C00',
+                            700: '#CC5200',
+                            800: '#B34700',
+                            900: '#993D00',
+                        },
+                        dark: {
+                            50: '#2A2A2A',
+                            100: '#242424',
+                            200: '#1E1E1E',
+                            300: '#181818',
+                            400: '#141414',
+                            500: '#121212',
+                            600: '#0E0E0E',
+                            700: '#0A0A0A',
+                            800: '#060606',
+                            900: '#000000',
+                        }
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        * { scroll-behavior: smooth; }
+        body {
+            background-color: #0E0E0E;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* ===== ANIMAÇÕES DE SCROLL ===== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .reveal-left.active { opacity: 1; transform: translateX(0); }
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .reveal-right.active { opacity: 1; transform: translateX(0); }
+        .reveal-scale {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .reveal-scale.active { opacity: 1; transform: scale(1); }
+
+        /* ===== BOTÕES ===== */
+        .btn-primary {
+            background: linear-gradient(135deg, #FF6600 0%, #FF8533 100%);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 25px rgba(255, 102, 0, 0.35);
+        }
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+            transition: left 0.6s ease;
+        }
+        .btn-primary:hover::before { left: 100%; }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 35px rgba(255, 102, 0, 0.5);
+        }
+
+        .btn-secondary {
+            border: 2px solid #FF6600;
+            color: #FF6600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .btn-secondary::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: #FF6600;
+            z-index: -1;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s ease;
+        }
+        .btn-secondary:hover::before { transform: scaleX(1); transform-origin: left; }
+        .btn-secondary:hover { color: white; transform: translateY(-2px); }
+
+        .btn-dark {
+            background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.5);
+        }
+        .btn-dark:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.7);
+        }
+
+        /* ===== CARDS ===== */
+        .pain-card {
+            background: linear-gradient(145deg, #1E1E1E 0%, #181818 100%);
+            border: 1px solid rgba(255, 102, 0, 0.1);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+        }
+        .pain-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 4px; height: 0;
+            background: linear-gradient(180deg, #FF6600, #FF8533);
+            transition: height 0.5s ease;
+        }
+        .pain-card:hover::before { height: 100%; }
+        .pain-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(255, 102, 0, 0.3);
+            box-shadow: 0 15px 40px rgba(255, 102, 0, 0.08);
+        }
+
+        .profile-card {
+            background: linear-gradient(145deg, #1E1E1E 0%, #181818 100%);
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.4s ease;
+        }
+        .profile-card:hover {
+            border-color: rgba(255, 102, 0, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        .profile-card:hover .profile-icon { transform: scale(1.1) rotate(5deg); }
+        .profile-icon { transition: all 0.4s ease; }
+
+        /* ===== TESTIMONIALS ===== */
+        .testimonial-card {
+            background: linear-gradient(145deg, #1a1a1a, #141414);
+            border: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+        }
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: -10px; left: 16px;
+            font-size: 100px;
+            color: rgba(255, 102, 0, 0.07);
+            font-family: Georgia, serif;
+            line-height: 1;
+        }
+
+        /* ===== HERO GLOW ===== */
+        .hero-glow {
+            position: absolute;
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(255,102,0,0.07) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        /* ===== STATS ===== */
+        .stat-item { position: relative; }
+        .stat-item::after {
+            content: '';
+            position: absolute;
+            right: 0; top: 50%;
+            transform: translateY(-50%);
+            width: 1px; height: 60%;
+            background: rgba(255,255,255,0.1);
+        }
+        .stat-item:last-child::after { display: none; }
+
+        /* ===== FAQ ===== */
+        .faq-item {
+            border: 1px solid rgba(255,255,255,0.06);
+            transition: all 0.3s ease;
+        }
+        .faq-item:hover { border-color: rgba(255, 102, 0, 0.2); }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), padding 0.3s ease;
+        }
+        .faq-answer.open { max-height: 300px; }
+        .faq-chevron { transition: transform 0.3s ease; }
+        .faq-chevron.rotated { transform: rotate(180deg); }
+
+        /* ===== GUARANTEE ===== */
+        .guarantee-section {
+            background: linear-gradient(135deg, #1a1a0a 0%, #0E0E0E 50%, #0a1a0a 100%);
+        }
+        .guarantee-badge {
+            background: linear-gradient(145deg, #1E1E1E, #181818);
+            border: 2px solid rgba(255, 102, 0, 0.3);
+        }
+
+        /* ===== CTA SECTION ===== */
+        .cta-section {
+            background: linear-gradient(135deg, #FF6600 0%, #e65c00 50%, #cc5200 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -50%; right: -20%;
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .cta-section::after {
+            content: '';
+            position: absolute;
+            bottom: -30%; left: -10%;
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(0,0,0,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        /* ===== CREDIBILITY ===== */
+        .credibility-gradient {
+            background: linear-gradient(135deg, #181818 0%, #121212 100%);
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            backdrop-filter: blur(20px);
+            background: rgba(14, 14, 14, 0.85);
+            transition: all 0.3s ease;
+        }
+        .navbar.scrolled {
+            box-shadow: 0 4px 30px rgba(0,0,0,0.3);
+            border-bottom: 1px solid rgba(255,102,0,0.1);
+        }
+
+        /* ===== FLOATING WPP ===== */
+        .wpp-float {
+            position: fixed;
+            bottom: 20px; right: 20px;
+            z-index: 999;
+            width: 56px; height: 56px;
+            border-radius: 50%;
+            background: #25D366;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+            transition: all 0.3s ease;
+            animation: pulse-wpp 2s infinite;
+        }
+        .wpp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 30px rgba(37, 211, 102, 0.6);
+        }
+        @keyframes pulse-wpp {
+            0%, 100% { box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4); }
+            50% { box-shadow: 0 4px 35px rgba(37, 211, 102, 0.6); }
+        }
+
+        /* ===== DIVIDER ===== */
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,102,0,0.2), transparent);
+        }
+
+        /* ===== MOBILE MENU ===== */
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .mobile-menu.open { transform: translateX(0); }
+    </style>
+</head>
+<body>
+
+    <!-- ======== NAVBAR ======== -->
+    <nav id="navbar" class="navbar fixed top-0 left-0 right-0 z-50 px-5 py-3">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <a href="#" class="text-xl font-black tracking-tight">
+                <span class="text-brand-500">EXON</span> <span class="text-white">IMÓVEIS</span>
+            </a>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#problemas" class="text-gray-400 hover:text-white transition-colors text-sm font-medium">Problemas</a>
+                <a href="#para-quem" class="text-gray-400 hover:text-white transition-colors text-sm font-medium">Para Quem</a>
+                <a href="#depoimentos" class="text-gray-400 hover:text-white transition-colors text-sm font-medium">Depoimentos</a>
+                <a href="#faq" class="text-gray-400 hover:text-white transition-colors text-sm font-medium">FAQ</a>
+                <a href="<?php echo $linkWpp; ?>" target="_blank" class="btn-secondary px-5 py-2 rounded-full font-bold text-sm">
+                    Falar com Especialista
+                </a>
+            </div>
+            <button id="menuBtn" class="md:hidden text-white text-xl">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu fixed inset-0 z-[60] bg-dark-600/98 backdrop-blur-xl flex flex-col items-center justify-center space-y-6">
+        <button id="closeMenuBtn" class="absolute top-5 right-5 text-white text-2xl">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <a href="#problemas" class="text-xl font-semibold text-gray-300 hover:text-brand-500 transition-colors mobile-link">Problemas</a>
+        <a href="#para-quem" class="text-xl font-semibold text-gray-300 hover:text-brand-500 transition-colors mobile-link">Para Quem</a>
+        <a href="#depoimentos" class="text-xl font-semibold text-gray-300 hover:text-brand-500 transition-colors mobile-link">Depoimentos</a>
+        <a href="#faq" class="text-xl font-semibold text-gray-300 hover:text-brand-500 transition-colors mobile-link">FAQ</a>
+        <a href="<?php echo $linkWpp; ?>" target="_blank" class="btn-primary px-7 py-3 rounded-full font-bold text-base text-white mt-3">
+            <i class="fa-brands fa-whatsapp mr-2"></i> Falar com Especialista
+        </a>
+    </div>
+
+    <!-- ======== HERO ======== -->
+    <section class="relative min-h-[85vh] flex items-center pt-16 pb-8 px-5 overflow-hidden">
+        <div class="hero-glow -top-32 -right-32 absolute"></div>
+        <div class="hero-glow -bottom-48 -left-32 absolute opacity-50"></div>
+
+        <div class="max-w-6xl mx-auto w-full flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
+            <!-- Left -->
+            <div class="lg:w-[55%] reveal-left">
+                <div class="inline-flex items-center space-x-2 bg-brand-500/10 border border-brand-500/20 rounded-full px-3 py-1.5 mb-5">
+                    <span class="w-2 h-2 bg-brand-500 rounded-full animate-pulse"></span>
+                    <span class="text-brand-500 text-xs font-semibold tracking-wide uppercase">Avaliação Profissional de Imóveis</span>
+                </div>
+
+                <h1 class="text-3xl md:text-4xl lg:text-5xl font-black leading-[1.1] mb-4">
+                    Sua empresa está perdendo dinheiro com
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-brand-300">avaliações imprecisas?</span>
+                </h1>
+
+                <p class="text-gray-400 text-base md:text-lg mb-6 leading-relaxed max-w-xl">
+                    Descubra o valor real de mercado do seu imóvel ou terreno com quem é autoridade em <strong class="text-white">Curitiba e região.</strong> Reduza riscos, aumente sua segurança e pare de perder dinheiro com estimativas amadoras.
+                </p>
+
+                <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                    <a href="<?php echo $linkWpp; ?>" target="_blank" class="btn-primary text-white px-6 py-3.5 rounded-xl text-base font-bold uppercase inline-flex items-center space-x-2">
+                        <i class="fa-brands fa-whatsapp text-xl"></i>
+                        <span>Quero uma Avaliação Gratuita</span>
+                    </a>
+                    <a href="#sobre" class="text-gray-400 hover:text-white transition-colors inline-flex items-center space-x-2 text-sm font-medium">
+                        <i class="fa-solid fa-play-circle text-brand-500"></i>
+                        <span>Conheça a EXON Imóveis</span>
+                    </a>
+                </div>
+
+                <p class="text-gray-600 text-xs mt-4 flex items-center space-x-2">
+                    <i class="fa-solid fa-shield-halved text-green-600"></i>
+                    <span>Consulta gratuita e sem compromisso</span>
+                </p>
+            </div>
+
+            <!-- Right -->
+            <div class="lg:w-[45%] reveal-right">
+                <div class="relative">
+                    <div class="relative w-full aspect-[4/3] bg-gradient-to-br from-dark-200 to-dark-400 rounded-2xl overflow-hidden border border-white/5 shadow-2xl">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="text-center">
+                                <i class="fa-solid fa-building text-7xl text-brand-500/20 mb-3"></i>
+                                <p class="text-brand-500/40 font-bold text-base uppercase tracking-widest">Exon Imóveis</p>
+                            </div>
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 right-0 p-5">
+                            <p class="text-brand-500 font-bold uppercase tracking-[0.2em] text-xs mb-1">Referência em Curitiba</p>
+                            <p class="text-white/80 text-sm">Laudos técnicos • Avaliações de mercado • Consultoria</p>
+                        </div>
+                    </div>
+
+                    <div class="absolute -top-3 -right-3 bg-dark-200/90 backdrop-blur-lg border border-white/10 rounded-xl p-3 shadow-xl">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-9 h-9 bg-green-500/20 rounded-lg flex items-center justify-center">
+                                <i class="fa-solid fa-arrow-trend-up text-green-400 text-sm"></i>
+                            </div>
+                            <div>
+                                <p class="text-white font-bold text-xs">+500</p>
+                                <p class="text-gray-500 text-[10px]">Avaliações Realizadas</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="absolute -bottom-3 -left-3 bg-dark-200/90 backdrop-blur-lg border border-white/10 rounded-xl p-3 shadow-xl">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-9 h-9 bg-brand-500/20 rounded-lg flex items-center justify-center">
+                                <i class="fa-solid fa-star text-brand-400 text-sm"></i>
+                            </div>
+                            <div>
+                                <p class="text-white font-bold text-xs">4.9/5.0</p>
+                                <p class="text-gray-500 text-[10px]">Satisfação dos Clientes</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ======== STATS BAR ======== -->
+    <section class="border-y border-white/5 bg-dark-300/50">
+        <div class="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4">
+            <div class="stat-item text-center py-5 px-3 reveal">
+                <p class="text-2xl md:text-3xl font-black text-brand-500" data-count="500">0+</p>
+                <p class="text-gray-500 text-xs mt-0.5 font-medium">Avaliações realizadas</p>
+            </div>
+            <div class="stat-item text-center py-5 px-3 reveal" style="transition-delay:0.1s">
+                <p class="text-2xl md:text-3xl font-black text-brand-500" data-count="15">0+</p>
+                <p class="text-gray-500 text-xs mt-0.5 font-medium">Anos de experiência</p>
+            </div>
+            <div class="stat-item text-center py-5 px-3 reveal" style="transition-delay:0.2s">
+                <p class="text-2xl md:text-3xl font-black text-brand-500">98%</p>
+                <p class="text-gray-500 text-xs mt-0.5 font-medium">Clientes satisfeitos</p>
+            </div>
+            <div class="stat-item text-center py-5 px-3 reveal" style="transition-delay:0.3s">
+                <p class="text-2xl md:text-3xl font-black text-brand-500">24h</p>
+                <p class="text-gray-500 text-xs mt-0.5 font-medium">Retorno garantido</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ======== PROBLEMAS / PAIN POINTS ======== -->
+    <section id="problemas" class="py-12 px-5">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-8 reveal">
+                <span class="text-brand-500 text-xs font-bold uppercase tracking-[0.2em]">Você se identifica?</span>
+                <h2 class="text-2xl md:text-3xl font-black mt-2">
+                    Se você passa por alguma destas situações,<br>
+                    <span class="text-brand-500">você está no lugar certo:</span>
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="pain-card rounded-xl p-6 reveal" style="transition-delay:0.05s">
+                    <div class="w-11 h-11 bg-brand-500/10 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-circle-question text-brand-500 text-lg"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2 text-white">Não sabe quanto pedir?</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Seu imóvel fica parado por meses porque o preço está fora da realidade do mercado.</p>
+                </div>
+
+                <div class="pain-card rounded-xl p-6 reveal" style="transition-delay:0.1s">
+                    <div class="w-11 h-11 bg-brand-500/10 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-arrow-trend-down text-brand-500 text-lg"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2 text-white">Medo de aceitar proposta baixa?</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Sem um laudo profissional, você fica vulnerável a compradores oportunistas.</p>
+                </div>
+
+                <div class="pain-card rounded-xl p-6 reveal" style="transition-delay:0.15s">
+                    <div class="w-11 h-11 bg-brand-500/10 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-file-signature text-brand-500 text-lg"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2 text-white">Burocracia e insegurança?</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Inventários e partilhas exigem laudos técnicos. Sem eles, tudo pode ser contestado.</p>
+                </div>
+
+                <div class="pain-card rounded-xl p-6 reveal" style="transition-delay:0.2s">
+                    <div class="w-11 h-11 bg-brand-500/10 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-clock-rotate-left text-brand-500 text-lg"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2 text-white">Perdendo tempo com curiosos?</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Com o preço errado, você atrai as pessoas erradas. Um valor justo atrai compradores sérios.</p>
+                </div>
+
+                <div class="pain-card rounded-xl p-6 reveal" style="transition-delay:0.25s">
+                    <div class="w-11 h-11 bg-brand-500/10 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-handshake-slash text-brand-500 text-lg"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2 text-white">Negociações sem poder?</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Sem laudo em mãos, você perde poder e fica à mercê das "avaliações" dos compradores.</p>
+                </div>
+
+                <div class="pain-card rounded-xl p-6 reveal" style="transition-delay:0.3s">
+                    <div class="w-11 h-11 bg-brand-500/10 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-coins text-brand-500 text-lg"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2 text-white">Oportunidades perdidas?</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Enquanto você espera, o mercado muda. Quem tem informação toma decisões lucrativas.</p>
+                </div>
+            </div>
+
+            <div class="text-center mt-8 reveal">
+                <p class="text-gray-400 text-sm max-w-2xl mx-auto mb-5">
+                    A boa notícia é que todos esses problemas têm <strong class="text-white">uma única solução:</strong> uma avaliação profissional feita por quem entende do mercado.
+                </p>
+                <a href="<?php echo $linkWpp; ?>" target="_blank" class="btn-primary text-white px-7 py-3.5 rounded-xl text-base font-bold uppercase inline-flex items-center space-x-2">
+                    <span>Quero Resolver Isso Agora</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider max-w-4xl mx-auto"></div>
+
+    <!-- ======== PARA QUEM ======== -->
+    <section id="para-quem" class="py-12 px-5">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-8 reveal">
+                <span class="text-brand-500 text-xs font-bold uppercase tracking-[0.2em]">Público-alvo</span>
+                <h2 class="text-2xl md:text-3xl font-black mt-2">
+                    Este serviço é <span class="text-brand-500">para você que:</span>
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="profile-card rounded-xl p-6 flex items-start space-x-4 reveal-left" style="transition-delay:0.05s">
+                    <div class="profile-icon bg-gradient-to-br from-brand-500 to-brand-700 p-3 rounded-xl flex-shrink-0">
+                        <i class="fa-solid fa-user-tie text-white text-base"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg mb-1 text-white">Proprietários de Imóveis</h4>
+                        <p class="text-gray-400 text-sm leading-relaxed">Deseja vender ou alugar com rapidez, segurança e pelo melhor valor possível.</p>
+                    </div>
+                </div>
+
+                <div class="profile-card rounded-xl p-6 flex items-start space-x-4 reveal-right" style="transition-delay:0.1s">
+                    <div class="profile-icon bg-gradient-to-br from-brand-500 to-brand-700 p-3 rounded-xl flex-shrink-0">
+                        <i class="fa-solid fa-mountain-sun text-white text-base"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg mb-1 text-white">Donos de Terrenos</h4>
+                        <p class="text-gray-400 text-sm leading-relaxed">Precisa de análise técnica de viabilidade e valor de mercado.</p>
+                    </div>
+                </div>
+
+                <div class="profile-card rounded-xl p-6 flex items-start space-x-4 reveal-left" style="transition-delay:0.15s">
+                    <div class="profile-icon bg-gradient-to-br from-brand-500 to-brand-700 p-3 rounded-xl flex-shrink-0">
+                        <i class="fa-solid fa-gavel text-white text-base"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg mb-1 text-white">Processos Jurídicos / Inventários</h4>
+                        <p class="text-gray-400 text-sm leading-relaxed">Necessita de laudo oficial para partilhas, divórcios ou ações judiciais.</p>
+                    </div>
+                </div>
+
+                <div class="profile-card rounded-xl p-6 flex items-start space-x-4 reveal-right" style="transition-delay:0.2s">
+                    <div class="profile-icon bg-gradient-to-br from-brand-500 to-brand-700 p-3 rounded-xl flex-shrink-0">
+                        <i class="fa-solid fa-chart-line text-white text-base"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg mb-1 text-white">Investidores Imobiliários</h4>
+                        <p class="text-gray-400 text-sm leading-relaxed">Busca oportunidades de compra abaixo do valor de mercado com dados reais.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider max-w-4xl mx-auto"></div>
+
+    <!-- ======== DEPOIMENTOS ======== -->
+    <section id="depoimentos" class="py-12 px-5">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-8 reveal">
+                <span class="text-brand-500 text-xs font-bold uppercase tracking-[0.2em]">Prova Social</span>
+                <h2 class="text-2xl md:text-3xl font-black mt-2">
+                    Veja o que dizem os clientes que
+                    <span class="text-brand-500">já confiam na EXON.</span>
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="testimonial-card rounded-xl p-6 reveal-scale" style="transition-delay:0.05s">
+                    <div class="flex items-center space-x-0.5 mb-4">
+                        <i class="fa-solid fa-star text-brand-400 text-xs"></i>
+                        <i class="fa-solid fa-star text-brand-400 text-xs"></i>
+                        <i class="fa-solid fa-star text-brand-400 text-xs"></i>
+                        <i class="fa-solid fa-star text-brand-400 text-xs"></i>
+                        <i class="fa-solid fa-star text-brand-400 text-xs"></i>
+                    </div>
+                    <p class="text-gray-300 text-sm leading-relaxed mb-4 italic">
+                        "Eu estava prestes a vender meu apartamento por R$80 mil a menos do que ele valia. A avaliação da EXON me mostrou o valor real e <strong class="text-white">consegui vender pelo preço justo em menos de 2 meses.</strong>"
+                    </p>
+                    <div class="flex items-center space-x-3 border-t border-white/5 pt-4">
+                        <div class="w-9 h-9 bg-brand-500/20 rounded-full flex items-center justify-center">
+                            <span class="text-brand-500 font-bold text-xs">RM</span>
+                        </div>
+                        <div>
+                            <p class="text-white font-semibold text-xs">Renata Moreira</p>
+                            <p class="text-gray-500 text-[10px]">Proprietária — Curitiba/PR</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card rounded-xl p-6 reveal-scale" style="transition-delay:0.15s">
+                    <div class="flex items-center space-x-0.5 mb-4">
+                        <i class="fa-solid fa-star text-brand-400 text-xs"></i>
+                        <i class="fa-solid fa-star text-brand-400 text-xs"></i>
+                        <i class="fa-solid fa-star text-brand-400 text-xs"></i>
+                        <i class="fa-solid fa-star text-brand-400 text-xs"></i>
+                        <i class="fa-solid fa-star text-brand-400 text-xs"></i>
+                    </div>
+                    <p class="text-gray-300 text-sm leading-relaxed mb-4 italic">
+                        "Precisei de um laudo para o inventário do meu pai e a EXON resolveu tudo com agilidade. <strong class="text-white">O laudo foi aceito sem nenhum questionamento no cartório.</strong>"
+                    </p>
+                    <div class="flex items-center space-x-3 border-t border-white/5 pt-4">
+                        <div class="w-9 h-9 bg-brand-500/20 rounded-full flex items-center justify-center">
+                            <span class="text-brand-500 font-bold text-xs">JC</span>
+                        </div>
+                        <div>
+                            <p class="text-white font-semibold text-xs">João Carlos Silva</p>
+                            <p class="text-gray-500 text-[10px]">Inventário — São José dos Pinhais/PR</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card rounded-xl p-6 reveal-scale" style="transition-delay:0.25s">
+                    <div class="flex items-center space-x-0.5 mb-4">
+                        <i class="fa-solid fa-star text-brand-400 text-xs"></i>
+                        <i class="fa-solid fa-star text-brand-400 text-xs"></i>
+                        <i class="fa-solid fa-star text-brand-400 text-xs"></i>
+                        <i class="fa-solid fa-star text-brand-400 text-xs"></i>
+                        <i class="fa-solid fa-star text-brand-400 text-xs"></i>
+                    </div>
+                    <p class="text-gray-300 text-sm leading-relaxed mb-4 italic">
+                        "Sou investidor e a EXON se tornou minha parceira de confiança. <strong class="text-white">Já comprei 3 imóveis abaixo do mercado</strong> graças às avaliações técnicas precisas."
+                    </p>
+                    <div class="flex items-center space-x-3 border-t border-white/5 pt-4">
+                        <div class="w-9 h-9 bg-brand-500/20 rounded-full flex items-center justify-center">
+                            <span class="text-brand-500 font-bold text-xs">AM</span>
+                        </div>
+                        <div>
+                            <p class="text-white font-semibold text-xs">André Machado</p>
+                            <p class="text-gray-500 text-[10px]">Investidor — Curitiba/PR</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-8 reveal">
+                <a href="<?php echo $linkWpp; ?>" target="_blank" class="btn-primary text-white px-7 py-3.5 rounded-xl text-base font-bold uppercase inline-flex items-center space-x-2">
+                    <span>Quero Ter Resultados Como Eles</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ======== CTA PRINCIPAL ======== -->
+    <section class="cta-section py-12 px-5 text-center relative z-10">
+        <div class="max-w-3xl mx-auto reveal-scale">
+            <h2 class="text-2xl md:text-4xl font-black text-white mb-3 uppercase leading-tight">
+                A sua virada de chave<br>começa agora!
+            </h2>
+            <p class="text-white/85 mb-6 text-base md:text-lg leading-relaxed">
+                Fale agora com um avaliador certificado da <strong>EXON IMÓVEIS</strong>. Consulta inicial 100% gratuita.
+            </p>
+            <a href="<?php echo $linkWpp; ?>" target="_blank" class="btn-dark text-white px-8 py-4 rounded-full text-lg md:text-xl font-bold uppercase inline-flex items-center space-x-2">
+                <i class="fa-brands fa-whatsapp text-2xl text-green-400"></i>
+                <span>Solicitar Avaliação via WhatsApp</span>
+            </a>
+            <p class="text-white/40 text-xs mt-4">
+                <i class="fa-solid fa-lock mr-1"></i> Seus dados estão seguros. Não enviamos spam.
+            </p>
+        </div>
+    </section>
+
+    <!-- ======== GARANTIA ======== -->
+    <section class="guarantee-section py-12 px-5">
+        <div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-6">
+            <div class="flex-shrink-0 reveal-left">
+                <div class="guarantee-badge w-28 h-28 rounded-full flex flex-col items-center justify-center">
+                    <i class="fa-solid fa-shield-halved text-brand-500 text-3xl mb-0.5"></i>
+                    <p class="text-white font-black text-base">100%</p>
+                    <p class="text-gray-400 text-[9px] uppercase tracking-widest">Satisfação</p>
+                </div>
+            </div>
+            <div class="reveal-right">
+                <h3 class="text-xl md:text-2xl font-black mb-2">O risco é <span class="text-brand-500">todo nosso.</span></h3>
+                <p class="text-gray-400 leading-relaxed text-sm">
+                    Se ao final da nossa consulta inicial você sentir que nosso serviço não é para você, não há nenhum custo. <strong class="text-white">Sem perguntas, sem burocracia.</strong> Nós acreditamos tanto na qualidade do nosso trabalho que assumimos 100% do risco para que você possa decidir com tranquilidade.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider max-w-4xl mx-auto"></div>
+
+    <!-- ======== CREDIBILIDADE / SOBRE ======== -->
+    <section id="sobre" class="py-12 px-5">
+        <div class="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-8">
+            <div class="lg:w-1/2 reveal-left">
+                <div class="credibility-gradient rounded-2xl p-7 border border-white/5">
+                    <div class="flex items-center space-x-3 mb-5">
+                        <div class="w-12 h-12 bg-brand-500/10 rounded-xl flex items-center justify-center">
+                            <i class="fa-solid fa-award text-brand-500 text-2xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-brand-500 font-bold uppercase text-xs tracking-wider">Referência</p>
+                            <p class="text-white font-black text-xl">No Mercado Imobiliário</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-dark-400/50 rounded-xl p-4 text-center">
+                            <p class="text-brand-500 font-black text-2xl">15+</p>
+                            <p class="text-gray-500 text-xs mt-0.5">Anos de atuação</p>
+                        </div>
+                        <div class="bg-dark-400/50 rounded-xl p-4 text-center">
+                            <p class="text-brand-500 font-black text-2xl">500+</p>
+                            <p class="text-gray-500 text-xs mt-0.5">Laudos emitidos</p>
+                        </div>
+                        <div class="bg-dark-400/50 rounded-xl p-4 text-center">
+                            <p class="text-brand-500 font-black text-2xl">CRECI</p>
+                            <p class="text-gray-500 text-xs mt-0.5">Regularizado</p>
+                        </div>
+                        <div class="bg-dark-400/50 rounded-xl p-4 text-center">
+                            <p class="text-brand-500 font-black text-2xl">CWB</p>
+                            <p class="text-gray-500 text-xs mt-0.5">Curitiba e Região</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:w-1/2 reveal-right">
+                <span class="text-brand-500 text-xs font-bold uppercase tracking-[0.2em]">Sobre a EXON</span>
+                <h2 class="text-2xl md:text-3xl font-black mt-2 mb-4">
+                    Aprenda com quem é
+                    <span class="text-brand-500">Referência no Mercado</span>
+                </h2>
+                <p class="text-gray-400 text-sm leading-relaxed mb-4">
+                    A <strong class="text-white">EXON Imóveis</strong> é referência em avaliações imobiliárias em Curitiba e região metropolitana. Com uma equipe de avaliadores certificados e tecnologia de ponta, entregamos laudos técnicos aceitos em cartórios, bancos e processos judiciais.
+                </p>
+                <p class="text-gray-400 text-sm leading-relaxed mb-5">
+                    Todo o conhecimento aplicado foi validado por décadas de experiência. Nós não apenas avaliamos imóveis; <strong class="text-white">nós protegemos o patrimônio dos nossos clientes.</strong>
+                </p>
+                <a href="<?php echo $linkWpp; ?>" target="_blank" class="btn-secondary px-6 py-2.5 rounded-xl font-bold text-sm inline-flex items-center space-x-2">
+                    <i class="fa-brands fa-whatsapp"></i>
+                    <span>Falar com um Especialista</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider max-w-4xl mx-auto"></div>
+
+    <!-- ======== FAQ ======== -->
+    <section id="faq" class="py-12 px-5">
+        <div class="max-w-3xl mx-auto">
+            <div class="text-center mb-8 reveal">
+                <span class="text-brand-500 text-xs font-bold uppercase tracking-[0.2em]">Tire suas dúvidas</span>
+                <h2 class="text-2xl md:text-3xl font-black mt-2">
+                    Perguntas <span class="text-brand-500">Frequentes</span>
+                </h2>
+            </div>
+
+            <div class="space-y-2.5">
+                <div class="faq-item bg-dark-200 rounded-xl overflow-hidden reveal" style="transition-delay:0.05s">
+                    <button class="faq-toggle w-full px-5 py-4 flex justify-between items-center text-left">
+                        <span class="font-semibold text-white text-sm pr-4">A avaliação inicial é realmente gratuita?</span>
+                        <i class="fa-solid fa-chevron-down faq-chevron text-brand-500 text-xs flex-shrink-0"></i>
+                    </button>
+                    <div class="faq-answer px-5">
+                        <p class="text-gray-400 text-sm pb-4 leading-relaxed">Sim! A consulta inicial é 100% gratuita e sem compromisso. Nela, entendemos sua necessidade e apresentamos como podemos ajudar.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item bg-dark-200 rounded-xl overflow-hidden reveal" style="transition-delay:0.1s">
+                    <button class="faq-toggle w-full px-5 py-4 flex justify-between items-center text-left">
+                        <span class="font-semibold text-white text-sm pr-4">Quanto tempo leva para receber a avaliação?</span>
+                        <i class="fa-solid fa-chevron-down faq-chevron text-brand-500 text-xs flex-shrink-0"></i>
+                    </button>
+                    <div class="faq-answer px-5">
+                        <p class="text-gray-400 text-sm pb-4 leading-relaxed">Nosso laudo é entregue em até 7 dias úteis após a vistoria. Em casos urgentes, oferecemos prazos reduzidos.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item bg-dark-200 rounded-xl overflow-hidden reveal" style="transition-delay:0.15s">
+                    <button class="faq-toggle w-full px-5 py-4 flex justify-between items-center text-left">
+                        <span class="font-semibold text-white text-sm pr-4">O laudo é aceito em processos judiciais?</span>
+                        <i class="fa-solid fa-chevron-down faq-chevron text-brand-500 text-xs flex-shrink-0"></i>
+                    </button>
+                    <div class="faq-answer px-5">
+                        <p class="text-gray-400 text-sm pb-4 leading-relaxed">Sim. Nossos laudos seguem as normas da ABNT (NBR 14653) e são aceitos em cartórios, bancos, tribunais e processos de inventário.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item bg-dark-200 rounded-xl overflow-hidden reveal" style="transition-delay:0.2s">
+                    <button class="faq-toggle w-full px-5 py-4 flex justify-between items-center text-left">
+                        <span class="font-semibold text-white text-sm pr-4">Vocês atendem quais regiões?</span>
+                        <i class="fa-solid fa-chevron-down faq-chevron text-brand-500 text-xs flex-shrink-0"></i>
+                    </button>
+                    <div class="faq-answer px-5">
+                        <p class="text-gray-400 text-sm pb-4 leading-relaxed">Toda a grande Curitiba e região metropolitana: São José dos Pinhais, Colombo, Araucária, Campo Largo, Pinhais, entre outros.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item bg-dark-200 rounded-xl overflow-hidden reveal" style="transition-delay:0.25s">
+                    <button class="faq-toggle w-full px-5 py-4 flex justify-between items-center text-left">
+                        <span class="font-semibold text-white text-sm pr-4">Qual a diferença entre avaliação de mercado e laudo técnico?</span>
+                        <i class="fa-solid fa-chevron-down faq-chevron text-brand-500 text-xs flex-shrink-0"></i>
+                    </button>
+                    <div class="faq-answer px-5">
+                        <p class="text-gray-400 text-sm pb-4 leading-relaxed">A avaliação de mercado é uma análise indicativa para compra/venda. O laudo técnico é um documento formal, com validade jurídica, seguindo normas da ABNT.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ======== CTA FINAL ======== -->
+    <section class="py-12 px-5">
+        <div class="max-w-4xl mx-auto text-center reveal-scale">
+            <div class="bg-gradient-to-br from-dark-200 to-dark-400 rounded-2xl p-8 md:p-10 border border-white/5 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-56 h-56 bg-brand-500/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+                <div class="absolute bottom-0 left-0 w-44 h-44 bg-brand-500/5 rounded-full translate-y-1/2 -translate-x-1/2"></div>
+                <div class="relative z-10">
+                    <div class="w-12 h-12 bg-brand-500/10 rounded-xl flex items-center justify-center mx-auto mb-4">
+                        <i class="fa-solid fa-house-chimney text-brand-500 text-2xl"></i>
+                    </div>
+                    <h2 class="text-2xl md:text-3xl font-black mb-2">
+                        Não deixe para depois.
+                    </h2>
+                    <p class="text-gray-400 text-sm mb-6 max-w-xl mx-auto">
+                        Cada dia sem saber o valor real do seu imóvel é um dia que você pode estar perdendo dinheiro. <strong class="text-white">Fale conosco agora.</strong>
+                    </p>
+                    <a href="<?php echo $linkWpp; ?>" target="_blank" class="btn-primary text-white px-8 py-4 rounded-xl text-lg font-bold uppercase inline-flex items-center space-x-2">
+                        <i class="fa-brands fa-whatsapp text-xl"></i>
+                        <span>Solicitar Avaliação Gratuita</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ======== FOOTER ======== -->
+    <footer class="bg-dark-900 py-8 px-5 border-t border-white/5">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <div>
+                    <div class="text-xl font-black mb-1">
+                        <span class="text-brand-500">EXON</span> IMÓVEIS
+                    </div>
+                    <p class="text-gray-600 text-xs">Referência em Avaliações Imobiliárias — Curitiba/PR</p>
+                </div>
+                <div class="flex items-center space-x-5">
+                    <a href="<?php echo $linkWpp; ?>" target="_blank" class="text-gray-500 hover:text-green-400 transition-colors text-lg" title="WhatsApp">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </a>
+                    <a href="#" class="text-gray-500 hover:text-blue-400 transition-colors text-lg" title="Instagram">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+                    <a href="#" class="text-gray-500 hover:text-blue-500 transition-colors text-lg" title="Facebook">
+                        <i class="fa-brands fa-facebook"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="mt-5 pt-5 border-t border-white/5 text-center">
+                <p class="text-gray-600 text-xs">© <?php echo date('Y'); ?> EXON Imóveis — Todos os direitos reservados.</p>
+                <p class="text-gray-700 text-[10px] mt-1">CRECI/PR — Avaliações conforme NBR 14653/ABNT</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ======== FLOATING WHATSAPP ======== -->
+    <a href="<?php echo $linkWpp; ?>" target="_blank" class="wpp-float" title="Fale conosco pelo WhatsApp">
+        <i class="fa-brands fa-whatsapp text-white text-2xl"></i>
+    </a>
+
+    <!-- ======== SCRIPTS ======== -->
+    <script>
+        // Scroll Reveal
+        function revealOnScroll() {
+            const reveals = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
+            const windowHeight = window.innerHeight;
+            reveals.forEach(el => {
+                const elementTop = el.getBoundingClientRect().top;
+                if (elementTop < windowHeight - 80) {
+                    el.classList.add('active');
+                }
+            });
+        }
+        window.addEventListener('scroll', revealOnScroll);
+        window.addEventListener('load', revealOnScroll);
+
+        // Navbar Scroll
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-toggle').forEach(button => {
+            button.addEventListener('click', () => {
+                const answer = button.nextElementSibling;
+                const chevron = button.querySelector('.faq-chevron');
+                const isOpen = answer.classList.contains('open');
+                document.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('open'));
+                document.querySelectorAll('.faq-chevron').forEach(c => c.classList.remove('rotated'));
+                if (!isOpen) {
+                    answer.classList.add('open');
+                    chevron.classList.add('rotated');
+                }
+            });
+        });
+
+        // Mobile Menu
+        const menuBtn = document.getElementById('menuBtn');
+        const closeMenuBtn = document.getElementById('closeMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        menuBtn.addEventListener('click', () => mobileMenu.classList.add('open'));
+        closeMenuBtn.addEventListener('click', () => mobileMenu.classList.remove('open'));
+        document.querySelectorAll('.mobile-link').forEach(link => {
+            link.addEventListener('click', () => mobileMenu.classList.remove('open'));
+        });
+
+        // Counter Animation
+        function animateCounters() {
+            const counters = document.querySelectorAll('[data-count]');
+            counters.forEach(counter => {
+                const target = parseInt(counter.getAttribute('data-count'));
+                const duration = 2000;
+                const step = target / (duration / 16);
+                let current = 0;
+                const updateCounter = () => {
+                    current += step;
+                    if (current < target) {
+                        counter.textContent = Math.floor(current) + '+';
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        counter.textContent = target + '+';
+                    }
+                };
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            updateCounter();
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.5 });
+                observer.observe(counter);
+            });
+        }
+        window.addEventListener('load', animateCounters);
+    </script>
+
+</body>
+</html>
